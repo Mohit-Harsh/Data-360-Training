@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>curriculum.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="salesforce-data-cloud--data-360--end-to-end-course-basic-%E2%86%92-advanced">Salesforce <strong>Data Cloud / Data 360</strong> — End-to-End Course (basic → advanced)</h1>
+<p><strong>Sources &amp; recommended official references:</strong> Trailhead / Trailhead Academy Data Cloud fundamentals, Salesforce Developer &amp; Help docs (Data Cloud / Data 360), and Data Cloud query &amp; object model guides. (<a href="https://trailheadacademy.salesforce.com/classes/sdc101-discover-salesforce-data-cloud-fundamentals?utm_source=chatgpt.com" title="Discover Salesforce Data Cloud Fundamentals - SDC101">trailheadacademy.salesforce.com</a>)</p>
+<hr>
+<h2 id="course-roadmap-high-level">Course roadmap (high level)</h2>
+<ol>
+<li>Foundations &amp; Concepts (Module 1–2)</li>
+<li>Data Ingestion &amp; Modeling (Module 3–4)</li>
+<li>Identity Resolution &amp; Profiles (Module 5)</li>
+<li>Segmentation, Calculated Insights &amp; Activation (Module 6–7)</li>
+<li>Querying, APIs &amp; Developer Topics (Module 8–10)</li>
+<li>Governance, Privacy, Monitoring &amp; Cost Management (Module 11)</li>
+<li>Advanced Use Cases, Integrations &amp; Real-Time Activation (Module 12–13)</li>
+<li>Capstone project + assessment (Module 14)</li>
+</ol>
+<hr>
+<h2 id="module-by-module-syllabus">Module-by-module syllabus</h2>
+<h3 id="module-1--data-cloud--data-360-concepts--architecture-foundation">Module 1 — Data Cloud / Data 360: Concepts &amp; Architecture (FOUNDATION)</h3>
+<p><strong>Duration:</strong> 3 hours</p>
+<p><strong>Learning objectives:</strong> Understand what Data Cloud (Data 360) is, how it fits in the Salesforce stack, and core capabilities (unified profiles, activation, real-time segmentation, zero-copy integrations). (<a href="https://www.salesforce.com/in/data/what-is-data-cloud/?utm_source=chatgpt.com" title="What Is Data 360?">Salesforce</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>What is Data Cloud / Data 360 and business value (CDP concepts).</li>
+<li>High-level architecture: DLOs, DMOs, unified profiles, identity graph, activation destinations. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce Developers</a>)</li>
+<li>Rebranding note: Data Cloud → Data 360 (what to expect in docs). (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-get-started.html?utm_source=chatgpt.com" title="Data 360 Developer Guide">Salesforce Developers</a>)</li>
+</ul>
+<p><strong>Lab:</strong> Walkthrough of Data Cloud UI (Trailhead lab / Academy SDC101). (<a href="https://trailheadacademy.salesforce.com/classes/sdc101-discover-salesforce-data-cloud-fundamentals?utm_source=chatgpt.com" title="Discover Salesforce Data Cloud Fundamentals - SDC101">trailheadacademy.salesforce.com</a>)</p>
+<hr>
+<h3 id="module-2--data-lake-objects-dlos--data-model-objects-dmos--modeling-fundamentals">Module 2 — Data Lake Objects (DLOs) &amp; Data Model Objects (DMOs) — Modeling fundamentals</h3>
+<p><strong>Duration:</strong> 6 hours (lecture + lab)</p>
+<p><strong>Prereq:</strong> Module 1</p>
+<p><strong>Learning objectives:</strong> Understand DLO vs DMO, mapping raw sources to a harmonized model, field types and constraints. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce Developers</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>DLOs: ingestion containers &amp; raw schema.</li>
+<li>DMOs: virtual/harmonized views; when to create custom DMOs.</li>
+<li>Mapping rules, data types, normalization, and enrichment points. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_map_custom_data_model_objects.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Map Data Model Objects">Salesforce</a>)</li>
+</ul>
+<p><strong>Lab:</strong> Create a DLO, map fields to a DMO, validate types.</p>
+<hr>
+<h3 id="module-3--data-ingestion--streaming-batch--real-time">Module 3 — Data Ingestion &amp; Streaming (BATCH &amp; REAL-TIME)</h3>
+<p><strong>Duration:</strong> 6–8 hours</p>
+<p><strong>Prereq:</strong> Modules 1–2</p>
+<p><strong>Learning objectives:</strong> Ingest data from CRM, marketing, e-commerce, data lakes; set up streaming connectors; zero-copy integrations (Snowflake/Databricks). (<a href="https://www.salesforce.com/in/data/what-is-data-cloud/?utm_source=chatgpt.com" title="What Is Data 360?">Salesforce</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Connectors: Salesforce sources (Sales/Service/Marketing Clouds), file/FTP, APIs, Streaming/CDC, and partner integrations.</li>
+<li>Data mapping patterns, schema evolution, incremental loads, error handling.</li>
+<li>Zero-copy architecture and using external tables (Snowflake/DB lakes). (<a href="https://www.salesforce.com/in/data/what-is-data-cloud/?utm_source=chatgpt.com" title="What Is Data 360?">Salesforce</a>)</li>
+</ul>
+<p><strong>Lab:</strong> Configure sample ingestion from CSV and from a Salesforce org.</p>
+<hr>
+<h3 id="module-4--data-quality--transformation-enrichment">Module 4 — Data Quality &amp; Transformation (ENRICHMENT)</h3>
+<p><strong>Duration:</strong> 4–6 hours</p>
+<p><strong>Prereq:</strong> Module 3</p>
+<p><strong>Learning objectives:</strong> Implement data quality rules, transformations, normalization, enrichment (calculated fields).</p>
+<p><strong>Topics:</strong> Validation rules, deduplication pre-processing, transformations using Data Cloud calculated insights, scheduling transformations.</p>
+<p><strong>Lab:</strong> Implement a transform to standardize phone numbers and create calculated fields for lifetime value.</p>
+<hr>
+<h3 id="module-5--identity-resolution--unified-profiles-core">Module 5 — Identity Resolution &amp; Unified Profiles (CORE)</h3>
+<p><strong>Duration:</strong> 6–8 hours</p>
+<p><strong>Prereq:</strong> Modules 2–4</p>
+<p><strong>Learning objectives:</strong> Design match rulesets, reconciliation rules, and understand golden record principles. Learn determinist vs probabilistic matching and key-rings/graphs. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_match_rules.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Identity Resolution Match Rules">Salesforce</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Identity graph basics, match criteria, match methods (deterministic, fuzzy), reconciliation (which value wins).</li>
+<li>Identity rulesets lifecycle and performance considerations.</li>
+<li>Best practices for PII handling, consent, and compliance.</li>
+</ul>
+<p><strong>Lab:</strong> Build a ruleset: create match rules, run identity resolution on a test dataset, review unified profiles.</p>
+<hr>
+<h3 id="module-6--segmentation--calculated-insights-real-time-personas">Module 6 — Segmentation &amp; Calculated Insights (REAL-TIME PERSONAS)</h3>
+<p><strong>Duration:</strong> 6 hours</p>
+<p><strong>Prereq:</strong> Module 5</p>
+<p><strong>Learning objectives:</strong> Create segments (real-time &amp; scheduled), build calculated insights (aggregates, recency/frequency metrics), and use segments for activation.</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Segment types: streaming vs batch; segmentation builder concepts.</li>
+<li>Calculated insights: aggregation, windowing, derived attributes.</li>
+<li>Use cases: churn detection, high-value customer segments.</li>
+</ul>
+<p><strong>Lab:</strong> Create a real-time segment (e.g., &quot;Browsed product X in last 24h + purchase in last year = No&quot;) and a calculated LTV field.</p>
+<hr>
+<h3 id="module-7--activation--orchestration-marketingservicesales">Module 7 — Activation &amp; Orchestration (Marketing/Service/Sales)</h3>
+<p><strong>Duration:</strong> 6 hours</p>
+<p><strong>Prereq:</strong> Module 6</p>
+<p><strong>Learning objectives:</strong> Activate segments to Marketing Cloud, Advertising platforms, Salesforce CRM, or external systems; automate activation workflows. (<a href="https://www.salesforce.com/in/marketing/data/?utm_source=chatgpt.com" title="The World's #1 Customer Data Platform (CDP)">Salesforce</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Activation destinations and connectors (Marketing Cloud, Email, Ads, custom APIs).</li>
+<li>Real-time vs scheduled activation; idempotency &amp; consent propagation.</li>
+<li>Use with Journey Builder / Marketing Cloud and with Sales/Service flows.</li>
+</ul>
+<p><strong>Lab:</strong> Activate a segment to Marketing Cloud Audience or export to webhook and confirm delivery.</p>
+<hr>
+<h3 id="module-8--querying-data-cloud-sql--soql--query-apis">Module 8 — Querying Data Cloud (SQL / SOQL / Query APIs)</h3>
+<p><strong>Duration:</strong> 6 hours</p>
+<p><strong>Prereq:</strong> Module 2 &amp; 3 and Module 0 (SQL)</p>
+<p><strong>Learning objectives:</strong> Query DLOs/DMOs using Data Cloud SQL and SOQL where appropriate; use Query APIs; write efficient queries. (<a href="https://developer.salesforce.com/docs/data/data-cloud-query-guide/guide/query-guide-get-started.html?utm_source=chatgpt.com" title="Data 360 Query Guide">Salesforce Developers</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Data Cloud SQL syntax and limitations (read-only contexts), SOQL usage against DMOs/DLOs.</li>
+<li>Query performance, recommended practices, and limiting costs.</li>
+<li>Using Query APIs and SDKs for exports &amp; analytics. (<a href="https://developer.salesforce.com/docs/data/data-cloud-query-guide/guide/dc-sql-query-apis.html?utm_source=chatgpt.com" title="Data 360 SQL Query APIs">Salesforce Developers</a>)</li>
+</ul>
+<p><strong>Lab:</strong> Write SQL queries to compute cohort metrics; use Query API to export results.</p>
+<hr>
+<h3 id="module-9--developer--api-integration-advanced">Module 9 — Developer &amp; API Integration (ADVANCED)</h3>
+<p><strong>Duration:</strong> 8 hours (lecture + coding labs)</p>
+<p><strong>Prereq:</strong> Module 8 + familiarity with Apex/JS/Python</p>
+<p><strong>Learning objectives:</strong> Use Data Cloud REST APIs/SDKs, integrate with Apex, build custom applications that consume calculated insights or profiles. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-dev-overview.html?utm_source=chatgpt.com" title="Data 360 Development Overview">Salesforce Developers</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Data 360 APIs (profile API, query API), SDKs, auth patterns (OAuth), rate limits.</li>
+<li>Eventing and webhooks; building microservices to react to identity or segment changes.</li>
+<li>Examples: pull unified profile in Apex, call Data Cloud query from external app.</li>
+</ul>
+<p><strong>Lab:</strong> Build a small app that queries a profile and displays calculated insight via API.</p>
+<hr>
+<h3 id="module-10--analytics-reporting--bi-connections">Module 10 — Analytics, Reporting &amp; BI connections</h3>
+<p><strong>Duration:</strong> 6 hours</p>
+<p><strong>Prereq:</strong> Modules 2, 8, 9</p>
+<p><strong>Learning objectives:</strong> Connect Data Cloud to Tableau/Einstein/BI tools, create dashboards from DMOs, use calculated insights for analytics. (<a href="https://developer.salesforce.com/blogs/2024/05/data-cloud-einstein-ai-the-developers-pocket-guide?utm_source=chatgpt.com" title="Data Cloud + Einstein AI: The Developer's Pocket Guide">Salesforce Developers</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Tableau / Einstein integrations, building datasets from Data Cloud.</li>
+<li>Near real-time dashboards vs batch reports; sample KPIs (LTV, churn, engagement).</li>
+</ul>
+<p><strong>Lab:</strong> Build a Tableau extract / dashboard using Data Cloud dataset.</p>
+<hr>
+<h3 id="module-11--governance-security-privacy--cost-management">Module 11 — Governance, Security, Privacy &amp; Cost Management</h3>
+<p><strong>Duration:</strong> 4–6 hours</p>
+<p><strong>Prereq:</strong> Modules 1–6</p>
+<p><strong>Learning objectives:</strong> Understand data governance, PII handling, consent, audit logging, and controlling Data Cloud costs (consumption patterns). (<a href="https://www.salesforce.com/in/data/?utm_source=chatgpt.com" title="Data 360 (Formerly Data Cloud)">Salesforce</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Data access controls, masking, encryption, deletion/retention policies.</li>
+<li>Audit trails, lineage, certification; compliance (GDPR, CCPA) considerations.</li>
+<li>Monitoring ingestion/query costs and best practices to reduce spend.</li>
+</ul>
+<p><strong>Lab:</strong> Implement role-based access for a DMO and simulate a data deletion request flow.</p>
+<hr>
+<h3 id="module-12--real-time-use-cases--streaming-architectures-advanced">Module 12 — Real-time Use Cases &amp; Streaming Architectures (Advanced)</h3>
+<p><strong>Duration:</strong> 6–8 hours</p>
+<p><strong>Prereq:</strong> Modules 3, 6, 9</p>
+<p><strong>Learning objectives:</strong> Build real-time personalization, real-time journeys, and streaming ingestion patterns (Kafka/CDC).</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Real-time personalization example flows (web personalization, in-app messaging).</li>
+<li>Integrating device IDs, ad platforms, and streaming connectors.</li>
+</ul>
+<p><strong>Lab:</strong> Build a working demo: real-time segment → webhook → front-end personalization response.</p>
+<hr>
+<h3 id="module-13--advanced-identity-graphs--ml-driven-insights">Module 13 — Advanced Identity, Graphs &amp; ML-driven Insights</h3>
+<p><strong>Duration:</strong> 6–8 hours</p>
+<p><strong>Prereq:</strong> Modules 5, 8, 9, 10</p>
+<p><strong>Learning objectives:</strong> Advanced identity graph work, using ML for probabilistic matching, leveraging Einstein/third-party ML models for predictions (churn/propensity). (<a href="https://developer.salesforce.com/blogs/2024/05/data-cloud-einstein-ai-the-developers-pocket-guide?utm_source=chatgpt.com" title="Data Cloud + Einstein AI: The Developer's Pocket Guide">Salesforce Developers</a>)</p>
+<p><strong>Topics:</strong></p>
+<ul>
+<li>Graph strategies, enrichment with device &amp; behavioral signals, ML pipelines.</li>
+<li>Integrating external ML models and orchestrating model outputs into calculated insights.</li>
+</ul>
+<p><strong>Lab:</strong> Run a simple propensity model, store scores as calculated insights, and create a segment using the scores.</p>
+<hr>
+<h3 id="module-14--capstone-project--certification-preparation">Module 14 — Capstone Project &amp; Certification Preparation</h3>
+<p><strong>Duration:</strong> 2–5 days (project) + 1 day exam prep</p>
+<p><strong>Prereq:</strong> All prior modules</p>
+<p><strong>Capstone options (choose 1):</strong></p>
+<ul>
+<li>Build an end-to-end Data Cloud solution: ingest CRM + e-commerce + web events, perform identity resolution, build LTV &amp; propensity calculated insights, create segments, and activate to Marketing Cloud for a campaign.</li>
+<li>Real-time personalization demo with segment activation to a web widget and CRM case creation for high-value customers.</li>
+</ul>
+<p><strong>Deliverables:</strong> Architecture diagram, implementation walkthrough, demo, cost &amp; governance plan, test results.</p>
+<hr>
+<h2 id="quick-reference-official-learning--docs-start-here">Quick reference: Official learning &amp; docs (start here)</h2>
+<ul>
+<li>Trailhead Academy — Data Cloud fundamentals (SDC101). (<a href="https://trailheadacademy.salesforce.com/classes/sdc101-discover-salesforce-data-cloud-fundamentals?utm_source=chatgpt.com" title="Discover Salesforce Data Cloud Fundamentals - SDC101">trailheadacademy.salesforce.com</a>)</li>
+<li>Data 360 / Data Cloud Developer Guide &amp; Query Guide (APIs, SQL). (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-dev-overview.html?utm_source=chatgpt.com" title="Data 360 Development Overview">Salesforce Developers</a>)</li>
+<li>Help articles: Identity Resolution, Data Lake Objects, Data Model Objects. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_match_rules.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Identity Resolution Match Rules">Salesforce</a>)</li>
+<li>Certification prep: Data Cloud Consultant study guide. (<a href="https://trailhead.salesforce.com/content/learn/modules/cert-prep-data-cloud-consultant/get-started-with-salesforce-data-cloud-consultant-certification-prep?utm_source=chatgpt.com" title="Salesforce Data Cloud Certification Prep Guide - Trailhead">Trailhead</a>)</li>
+</ul>
+<hr>
+
+</body>
+</html>

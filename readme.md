@@ -105,13 +105,13 @@
 
 ## Lab — Data Mapping (DLO to DMO)
 
-Mapping Data from `Contact` (Data Lake Object) to `Employee` (Data Model Object). 
+Mapping Data from `Contact_Home` (Data Lake Object) to `Employee` (Data Model Object). 
 
 ### 1. Create Data Stream (Source Connection) 🔗
 
 - In Data Cloud, go to `Data Streams` $\to$ New.
 - Select `Salesforce CRM` from Connected Sources.
-- Click on `View Objects` $\to$ Select `Contact` Object.
+- Click on `View Objects` $\to$ Select `Contact_Home` Object.
 - Object Category $\to$ `Other`.
 - Select the required fields: `Contact ID, FirstName, LastName, Email`.
 - Click Next and then click Deploy.
@@ -125,7 +125,7 @@ Mapping Data from `Contact` (Data Lake Object) to `Employee` (Data Model Object)
 
 ### 3. Map Contact (DLO) to Associate (DMO)
 
-- Go to `Data Streams` $\to$ Open the `Contact` Data Stream.
+- Go to `Data Streams` $\to$ Open the `Contact_Home` Data Stream.
 - In data map section click on `Start`.
 - Click on `Select Objects` in data model object section $\to$ Select `Associate` Object.
 - Map the fields from DLO to DMO.
