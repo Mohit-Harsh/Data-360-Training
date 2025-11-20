@@ -371,64 +371,64 @@ code {
 <h1 id="module-1--data-cloud--data-360-concepts--architecture-foundation">Module 1 — Data Cloud / Data 360: Concepts &amp; Architecture (FOUNDATION)</h1>
 <p><strong>Learning objectives</strong></p>
 <ul>
-<li>Understand what Salesforce Data Cloud (Data 360) is and its business value (CDP concepts). (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Architects</a>)</li>
-<li>Know the core architectural pieces (DLO, DMO, unified profiles / identity graph, activation destinations) and how they connect. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce Developers</a>)</li>
-<li>Recognize rebranding notes (Data Cloud → <em>Data 360</em>) and where to look for updated docs. (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Architects</a>)</li>
+<li>Understand what Salesforce Data Cloud (Data 360) is and its business value (CDP concepts).</li>
+<li>Know the core architectural pieces (DLO, DMO, unified profiles / identity graph, activation destinations) and how they connect.</li>
+<li>Recognize rebranding notes (Data Cloud → <em>Data 360</em>) and where to look for updated docs.</li>
 </ul>
 <h2 id="1-what-is-data-cloud--data-360--high-level--business-value">1. What is Data Cloud / Data 360 — high level &amp; business value</h2>
 <ul>
-<li><strong>Definition (one line):</strong> Data 360 is Salesforce’s customer data platform (CDP) that unifies, harmonizes, and makes customer data actionable across the Salesforce stack. (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Architects</a>)</li>
-<li><strong>Business value:</strong> single source of truth for customer data, faster personalization, real-time segmentation, safer governance of PII, and simplified activation to marketing/sales/service systems. (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Architects</a>)</li>
+<li><strong>Definition (one line):</strong> Data 360 is Salesforce’s customer data platform (CDP) that unifies, harmonizes, and makes customer data actionable across the Salesforce stack.</li>
+<li><strong>Business value:</strong> single source of truth for customer data, faster personalization, real-time segmentation, safer governance of PII, and simplified activation to marketing/sales/service systems.</li>
 <li><strong>When to use:</strong> cross-cloud personalization, joined analytics across systems, powering Journeys/agents with unified customer context, or when you want “one view” without losing source fidelity.</li>
 </ul>
 <h2 id="2-core-architectural-elements-simple-definitions">2. Core architectural elements (simple definitions)</h2>
 <center><img src='./assets/DataCloud_ArchDiagram052025.png'/></center>
 <ul>
 <li><strong>Data Stream</strong> — connector that brings data into Data 360 (or points to external data for zero-copy).</li>
-<li><strong>Data Lake Object (DLO)</strong> — raw, ingested table(s). Think of DLOs as the “raw dump” from each source (each DLO = one table). Use DLOs when you need the original, source-shaped records. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce Developers</a>)</li>
-<li><strong>Data Model Object (DMO)</strong> — a curated, business-facing view (a mapped/standardized model). DMOs are created by mapping fields from one or more DLOs into a stable schema used by downstream processes (segmentation, activation). DMOs are like “views” or the prepared dataset. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce Developers</a>)</li>
-<li><strong>Unified Profiles / Identity Graph</strong> — identity resolution rulesets that link multiple source profiles into a single <em>Unified Individual</em> (single customer record used for segmentation &amp; activation). (<a href="https://trailhead.salesforce.com/content/learn/modules/data-and-identity-in-salesforce-cdp/get-to-know-unified-profiles?utm_source=chatgpt.com" title="Get to Know Unified Profiles | Salesforce Trailhead">Trailhead</a>)</li>
-<li><strong>Calculated Insights</strong> — derived/calculated metrics or signals (e.g., lifetime value) used in segmentation. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_glossary_guide.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Data 360 Glossary of Terms">Salesforce</a>)</li>
-<li><strong>Activation destinations</strong> — where segments or unified data are sent (Marketing Cloud Journeys, CRM updates, ad platforms, files, streaming endpoints). Activation can be streaming (near-real-time) or batch. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_dmo_activation.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Activation for Data 360 Data Model Objects">Salesforce</a>)</li>
+<li><strong>Data Lake Object (DLO)</strong> — raw, ingested table(s). Think of DLOs as the “raw dump” from each source (each DLO = one table). Use DLOs when you need the original, source-shaped records.</li>
+<li><strong>Data Model Object (DMO)</strong> — a curated, business-facing view (a mapped/standardized model). DMOs are created by mapping fields from one or more DLOs into a stable schema used by downstream processes (segmentation, activation). DMOs are like “views” or the prepared dataset.</li>
+<li><strong>Unified Profiles / Identity Graph</strong> — identity resolution rulesets that link multiple source profiles into a single <em>Unified Individual</em> (single customer record used for segmentation &amp; activation).</li>
+<li><strong>Calculated Insights</strong> — derived/calculated metrics or signals (e.g., lifetime value) used in segmentation.</li>
+<li><strong>Activation destinations</strong> — where segments or unified data are sent (Marketing Cloud Journeys, CRM updates, ad platforms, files, streaming endpoints). Activation can be streaming (near-real-time) or batch.</li>
 </ul>
 <h2 id="3-zero-copy-data-federation--short-explanation">3. Zero-copy (data federation) — short explanation</h2>
 <ul>
-<li><strong>What it is:</strong> ability to query and use external data without physically copying it into Data 360 (federation / live query). Good when you must avoid duplication or keep very large datasets in place. (<a href="https://www.salesforce.com/data/connectivity/zero-copy/?utm_source=chatgpt.com" title="Data Cloud – Zero Copy Connectivity">Salesforce</a>)</li>
+<li><strong>What it is:</strong> ability to query and use external data without physically copying it into Data 360 (federation / live query). Good when you must avoid duplication or keep very large datasets in place.</li>
 <li><strong>When to choose zero-copy:</strong> very large tables, regulatory/PII constraints, or when you need the freshest record without ETL. Consider performance and mapping needs — sometimes a physical copy (ingest) is still preferable.</li>
 </ul>
 <h2 id="4-how-the-pieces-connect-one-paragraph-flow">4. How the pieces connect (one-paragraph flow)</h2>
 <ol>
 <li><strong>Ingest or federate</strong> data via Data Streams into DLOs (or reference external tables via zero-copy).</li>
-<li><strong>Map DLO fields → DMO fields</strong> to create harmonized, business-friendly objects (Customer, Transaction, Event). (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_map_custom_data_model_objects.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Map Data Model Objects">Salesforce</a>)</li>
-<li><strong>Create identity resolution rulesets</strong> and unify to produce Unified Individuals (identity graph). (<a href="https://trailhead.salesforce.com/content/learn/modules/data-and-identity-in-salesforce-cdp/get-to-know-unified-profiles?utm_source=chatgpt.com" title="Get to Know Unified Profiles | Salesforce Trailhead">Trailhead</a>)</li>
+<li><strong>Map DLO fields → DMO fields</strong> to create harmonized, business-friendly objects (Customer, Transaction, Event).</li>
+<li><strong>Create identity resolution rulesets</strong> and unify to produce Unified Individuals (identity graph).</li>
 <li><strong>Build real-time segments</strong> (audiences) using DMOs &amp; calculated insights.</li>
-<li><strong>Activate</strong> segments to destinations (streaming or batch) for Journeys, ads, CRM updates, or analytics. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_dmo_activation.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Activation for Data 360 Data Model Objects">Salesforce</a>)</li>
+<li><strong>Activate</strong> segments to destinations (streaming or batch) for Journeys, ads, CRM updates, or analytics.</li>
 </ol>
 <h2 id="5-quick-tips">5. Quick tips</h2>
 <ul>
 <li>
-<p><strong>Mapping is contract work:</strong> DMOs are the contract consumers use — think carefully about stable field names and types. Changing a DMO field type later can be disruptive. (<a href="https://help.salesforce.com/s/articleView?id=001233477&amp;language=en_US&amp;type=1&amp;utm_source=chatgpt.com" title="Data 360: Data Type of Data Lake Object and Data Model ...">Salesforce</a>)</p>
+<p><strong>Mapping is contract work:</strong> DMOs are the contract consumers use — think carefully about stable field names and types. Changing a DMO field type later can be disruptive. ([Salesforce][9])</p>
 </li>
 <li>
-<p><strong>Identity rules matter:</strong> loose rules → over-merging; strict rules → duplicate unified profiles. Start conservative, test thoroughly. (<a href="https://trailhead.salesforce.com/content/learn/modules/data-and-identity-in-salesforce-cdp/get-to-know-unified-profiles?utm_source=chatgpt.com" title="Get to Know Unified Profiles | Salesforce Trailhead">Trailhead</a>)</p>
+<p><strong>Identity rules matter:</strong> loose rules → over-merging; strict rules → duplicate unified profiles. Start conservative, test thoroughly.</p>
 </li>
 <li>
-<p><strong>Zero-copy tradeoffs:</strong> great for governance and freshness, but evaluate query latency and mapping complexity before choosing. (<a href="https://www.salesforceben.com/salesforce-data-cloud-zero-copy-when-and-when-not-to-use-it/?utm_source=chatgpt.com" title="Salesforce Data Cloud Zero Copy: When (and When Not) ...">Salesforce Ben</a>)</p>
+<p><strong>Zero-copy tradeoffs:</strong> great for governance and freshness, but evaluate query latency and mapping complexity before choosing.</p>
 </li>
 <li>
-<p><strong>Activation mode:</strong> use streaming for near-real-time needs (agentic experiences / immediate journeys), batch for large periodic exports. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_dmo_activation.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Activation for Data 360 Data Model Objects">Salesforce</a>)</p>
+<p><strong>Activation mode:</strong> use streaming for near-real-time needs (agentic experiences / immediate journeys), batch for large periodic exports.</p>
 </li>
 <li>
-<p>Data 360 architecture overview — Salesforce Architect docs. (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Architects</a>)</p>
+<p>Data 360 architecture overview — Salesforce Architect docs.</p>
 </li>
 <li>
-<p>Data Model Objects &amp; mapping guide — Salesforce Help / Developer docs. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_map_custom_data_model_objects.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Map Data Model Objects">Salesforce</a>)</p>
+<p>Data Model Objects &amp; mapping guide — Salesforce Help / Developer docs.</p>
 </li>
 <li>
-<p>Trailhead module: Get to know Unified Profiles (hands-on identity examples). (<a href="https://trailhead.salesforce.com/content/learn/modules/data-and-identity-in-salesforce-cdp/get-to-know-unified-profiles?utm_source=chatgpt.com" title="Get to Know Unified Profiles | Salesforce Trailhead">Trailhead</a>)</p>
+<p>Trailhead module: Get to know Unified Profiles (hands-on identity examples).</p>
 </li>
 <li>
-<p>Zero-copy overview &amp; guides (when to use, partner integrations). (<a href="https://www.salesforce.com/data/connectivity/zero-copy/?utm_source=chatgpt.com" title="Data Cloud – Zero Copy Connectivity">Salesforce</a>)</p>
+<p>Zero-copy overview &amp; guides (when to use, partner integrations).</p>
 </li>
 </ul>
 <hr>
@@ -481,39 +481,39 @@ code {
 </table>
 <h2 id="2-dlo">2. DLO</h2>
 <ul>
-<li>Common DLO sources: Sales Cloud exports, event streams (e-commerce), POS CSVs, external warehouses (S3/GCS). You can also reference unstructured DLOs for files (UDLOs). (<a href="https://trailhead.salesforce.com/content/learn/modules/data-and-identity-in-salesforce-cdp/get-to-know-unified-profiles?utm_source=chatgpt.com" title="Get to Know Unified Profiles | Salesforce Trailhead">Salesforce</a>)</li>
-<li>DLO properties: schema mirrors source; fields are created at ingest; changing DLO field types after creation is restricted—plan carefully. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_glossary_guide.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Data 360 Glossary of Terms">Salesforce</a>)</li>
+<li>Common DLO sources: Sales Cloud exports, event streams (e-commerce), POS CSVs, external warehouses (S3/GCS). You can also reference unstructured DLOs for files (UDLOs).</li>
+<li>DLO properties: schema mirrors source; fields are created at ingest; changing DLO field types after creation is restricted—plan carefully.</li>
 </ul>
 <h2 id="3-dmo">3. DMO</h2>
 <ul>
-<li>Types: standard DMOs (prebuilt like Contact, Account) and custom DMOs (create when your business needs a specific harmonized view). Create custom DMOs when you need fields or semantics not provided by standard DMOs. (<a href="https://architect.salesforce.com/fundamentals/data-360-architecture?utm_source=chatgpt.com" title="Data 360 Architecture">Salesforce Developers</a>)</li>
-<li>Behavior: a DMO can draw from one or multiple DLOs; mapping defines how source fields become DMO fields and how relationships are modeled. (<a href="https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com" title="Object Model in Data 360">Salesforce</a>)</li>
+<li>Types: standard DMOs (prebuilt like Contact, Account) and custom DMOs (create when your business needs a specific harmonized view). Create custom DMOs when you need fields or semantics not provided by standard DMOs.</li>
+<li>Behavior: a DMO can draw from one or multiple DLOs; mapping defines how source fields become DMO fields and how relationships are modeled.</li>
 </ul>
 <h2 id="4-mapping-rules--data-types--practical-rules">4. Mapping rules &amp; data types — practical rules</h2>
 <ul>
-<li><strong>Compatibility:</strong> DLO → DMO field data types must be compatible; once set, types are hard to change — decide types carefully (strings vs numeric vs date). (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_dmo_activation.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Activation for Data 360 Data Model Objects">Salesforce</a>)</li>
-<li><strong>Primary keys &amp; required mappings:</strong> Profile/Other DMOs often require you to map the primary key; some DMOs require specific system fields to be mapped for identity or activation to work. Validate required mappings before activation. (<a href="https://www.salesforce.com/data/connectivity/zero-copy/?utm_source=chatgpt.com" title="Data Cloud – Zero Copy Connectivity">Salesforce</a>)</li>
-<li><strong>Auto-mapping:</strong> Data Cloud offers auto-mapping helpers (model card) — useful for initial mapping but always review and adjust for business rules. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_map_custom_data_model_objects.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Map Data Model Objects">Salesforce</a>)</li>
+<li><strong>Compatibility:</strong> DLO → DMO field data types must be compatible; once set, types are hard to change — decide types carefully (strings vs numeric vs date).</li>
+<li><strong>Primary keys &amp; required mappings:</strong> Profile/Other DMOs often require you to map the primary key; some DMOs require specific system fields to be mapped for identity or activation to work. Validate required mappings before activation.</li>
+<li><strong>Auto-mapping:</strong> Data Cloud offers auto-mapping helpers (model card) — useful for initial mapping but always review and adjust for business rules.</li>
 </ul>
 <h2 id="5-normalization--enrichment--where-and-how">5. Normalization &amp; enrichment — where and how</h2>
 <ul>
-<li><strong>Normalization (when to do it):</strong> fix inconsistent formats (phone, email, currency), flatten nested JSON, split composite fields into atomic fields — typically done between DLO ingestion and DMO mapping (use interim DLOs or transforms). (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_omni_home.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Create Omnichannel Journeys Using Unified Individual ...">Salesforce Ben</a>)</li>
-<li><strong>Enrichment (when to do it):</strong> add derived fields (loyalty_score, lifetime_value), lookup references (geolocation), or external enrichments (third-party demographics) — usually created as calculated insights or written back to DMOs/DLOs as needed. (<a href="https://help.salesforce.com/s/articleView?id=001233477&amp;language=en_US&amp;type=1&amp;utm_source=chatgpt.com" title="Data 360: Data Type of Data Lake Object and Data Model ...">Salesforce</a>)</li>
+<li><strong>Normalization (when to do it):</strong> fix inconsistent formats (phone, email, currency), flatten nested JSON, split composite fields into atomic fields — typically done between DLO ingestion and DMO mapping (use interim DLOs or transforms).</li>
+<li><strong>Enrichment (when to do it):</strong> add derived fields (loyalty_score, lifetime_value), lookup references (geolocation), or external enrichments (third-party demographics) — usually created as calculated insights or written back to DMOs/DLOs as needed.</li>
 </ul>
 <h2 id="6-quick-tips">6. Quick tips</h2>
 <ul>
-<li><strong>Plan types first:</strong> once DLO/DMO fields are created, changing types is hard — design schemas thoughtfully. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_glossary_guide.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Data 360 Glossary of Terms">Salesforce</a>)</li>
-<li><strong>Interim DLOs are your friend:</strong> use them to clean noisy data before mapping into DMOs, especially for contact-point fields. (<a href="https://help.salesforce.com/s/articleView?id=data.c360_a_omni_home.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Create Omnichannel Journeys Using Unified Individual ...">Salesforce Ben</a>)</li>
-<li><strong>Map only what you need:</strong> avoid ingesting unnecessary columns — smaller DLOs are cheaper and faster. (<a href="https://scandiweb.com/blog/data-ingestion-in-salesforce-data-cloud/?utm_source=chatgpt.com" title="Data Ingestion in Salesforce Data Cloud: Practical Guide">Scandiweb</a>)</li>
-<li><strong>Document mapping decisions:</strong> capture why you chose aggregations (SUM vs MAX), primary keys, and transforms — prevents later regressions. (<a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_mapping_best_practices.htm&amp;language=en_US&amp;type=5&amp;utm_source=chatgpt.com" title="Data Mapping Best Practices">Salesforce</a>)</li>
+<li><strong>Plan types first:</strong> once DLO/DMO fields are created, changing types is hard — design schemas thoughtfully.</li>
+<li><strong>Interim DLOs are your friend:</strong> use them to clean noisy data before mapping into DMOs, especially for contact-point fields.</li>
+<li><strong>Map only what you need:</strong> avoid ingesting unnecessary columns — smaller DLOs are cheaper and faster.</li>
+<li><strong>Document mapping decisions:</strong> capture why you chose aggregations (SUM vs MAX), primary keys, and transforms — prevents later regressions.</li>
 </ul>
 <h2 id="lab--data-mapping-dlo-to-dmo">Lab — Data Mapping (DLO to DMO)</h2>
-<p>Mapping Data from <code>Contact</code> (Data Lake Object) to <code>Employee</code> (Data Model Object).</p>
+<p>Mapping Data from <code>Contact_Home</code> (Data Lake Object) to <code>Employee</code> (Data Model Object).</p>
 <h3 id="1-create-data-stream-source-connection-%F0%9F%94%97">1. Create Data Stream (Source Connection) 🔗</h3>
 <ul>
 <li>In Data Cloud, go to <code>Data Streams</code> $\to$ New.</li>
 <li>Select <code>Salesforce CRM</code> from Connected Sources.</li>
-<li>Click on <code>View Objects</code> $\to$ Select <code>Contact</code> Object.</li>
+<li>Click on <code>View Objects</code> $\to$ Select <code>Contact_Home</code> Object.</li>
 <li>Object Category $\to$ <code>Other</code>.</li>
 <li>Select the required fields: <code>Contact ID, FirstName, LastName, Email</code>.</li>
 <li>Click Next and then click Deploy.</li>
@@ -527,7 +527,7 @@ code {
 </ul>
 <h3 id="3-map-contact-dlo-to-associate-dmo">3. Map Contact (DLO) to Associate (DMO)</h3>
 <ul>
-<li>Go to <code>Data Streams</code> $\to$ Open the <code>Contact</code> Data Stream.</li>
+<li>Go to <code>Data Streams</code> $\to$ Open the <code>Contact_Home</code> Data Stream.</li>
 <li>In data map section click on <code>Start</code>.</li>
 <li>Click on <code>Select Objects</code> in data model object section $\to$ Select <code>Associate</code> Object.</li>
 <li>Map the fields from DLO to DMO.</li>

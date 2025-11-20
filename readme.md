@@ -1,141 +1,287 @@
 
-<center><img width='200px' src='./assets/data_360_logo.png'/></center>
+# Salesforce **Data Cloud / Data 360** — End-to-End Course (basic → advanced)   <img src='./assets/data_360_logo.png' width='100px'/>
 
-<h1 align='center'>Salesforce Data 360</h1>
-
-<br>
-
-# Module 1 — Data Cloud / Data 360: Concepts & Architecture (FOUNDATION)
-
-**Learning objectives**
-
-* Understand what Salesforce Data Cloud (Data 360) is and its business value (CDP concepts). 
-* Know the core architectural pieces (DLO, DMO, unified profiles / identity graph, activation destinations) and how they connect.
-* Recognize rebranding notes (Data Cloud → *Data 360*) and where to look for updated docs.
-
-## 1. What is Data Cloud / Data 360 — high level & business value
-
-* **Definition (one line):** Data 360 is Salesforce’s customer data platform (CDP) that unifies, harmonizes, and makes customer data actionable across the Salesforce stack. 
-* **Business value:** single source of truth for customer data, faster personalization, real-time segmentation, safer governance of PII, and simplified activation to marketing/sales/service systems.
-* **When to use:** cross-cloud personalization, joined analytics across systems, powering Journeys/agents with unified customer context, or when you want “one view” without losing source fidelity.
-
-## 2. Core architectural elements (simple definitions)
-
-<center><img src='./assets/DataCloud_ArchDiagram052025.png'/></center>
-
-* **Data Stream** — connector that brings data into Data 360 (or points to external data for zero-copy).
-* **Data Lake Object (DLO)** — raw, ingested table(s). Think of DLOs as the “raw dump” from each source (each DLO = one table). Use DLOs when you need the original, source-shaped records. 
-* **Data Model Object (DMO)** — a curated, business-facing view (a mapped/standardized model). DMOs are created by mapping fields from one or more DLOs into a stable schema used by downstream processes (segmentation, activation). DMOs are like “views” or the prepared dataset.
-* **Unified Profiles / Identity Graph** — identity resolution rulesets that link multiple source profiles into a single *Unified Individual* (single customer record used for segmentation & activation).
-* **Calculated Insights** — derived/calculated metrics or signals (e.g., lifetime value) used in segmentation.
-* **Activation destinations** — where segments or unified data are sent (Marketing Cloud Journeys, CRM updates, ad platforms, files, streaming endpoints). Activation can be streaming (near-real-time) or batch. 
-
-## 3. Zero-copy (data federation) — short explanation
-
-* **What it is:** ability to query and use external data without physically copying it into Data 360 (federation / live query). Good when you must avoid duplication or keep very large datasets in place. 
-* **When to choose zero-copy:** very large tables, regulatory/PII constraints, or when you need the freshest record without ETL. Consider performance and mapping needs — sometimes a physical copy (ingest) is still preferable.
-
-## 4. How the pieces connect (one-paragraph flow)
-
-1. **Ingest or federate** data via Data Streams into DLOs (or reference external tables via zero-copy).
-2. **Map DLO fields → DMO fields** to create harmonized, business-friendly objects (Customer, Transaction, Event).
-3. **Create identity resolution rulesets** and unify to produce Unified Individuals (identity graph). 
-4. **Build real-time segments** (audiences) using DMOs & calculated insights.
-5. **Activate** segments to destinations (streaming or batch) for Journeys, ads, CRM updates, or analytics. 
-
-## 5. Quick tips
-
-* **Mapping is contract work:** DMOs are the contract consumers use — think carefully about stable field names and types. Changing a DMO field type later can be disruptive. ([Salesforce][9])
-* **Identity rules matter:** loose rules → over-merging; strict rules → duplicate unified profiles. Start conservative, test thoroughly. 
-* **Zero-copy tradeoffs:** great for governance and freshness, but evaluate query latency and mapping complexity before choosing. 
-* **Activation mode:** use streaming for near-real-time needs (agentic experiences / immediate journeys), batch for large periodic exports. 
-
-* Data 360 architecture overview — Salesforce Architect docs. 
-* Data Model Objects & mapping guide — Salesforce Help / Developer docs. 
-* Trailhead module: Get to know Unified Profiles (hands-on identity examples). 
-* Zero-copy overview & guides (when to use, partner integrations).
+**Sources & recommended official references:** Trailhead / Trailhead Academy Data Cloud fundamentals, Salesforce Developer & Help docs (Data Cloud / Data 360), and Data Cloud query & object model guides. ([trailheadacademy.salesforce.com][1])
 
 ---
 
-<br>
+## Course roadmap (high level)
 
-# Module 2 — DLOs & DMOs — Modeling fundamentals (6 hours: lecture + lab)
-
-**Prereq:** Module 1 — Data Cloud / Data 360 concepts.
-
-**Learning objectives:** Know what DLOs and DMOs are; map raw sources to a harmonized model; choose field types & constraints; apply normalization and enrichment; build a DLO → DMO mapping and validate types.
-
-## 1. Quick definitions
-
-| Object | Abbreviation | Definition | Creation and Usage |
-| :--- | :--- | :--- | :--- |
-| **Data Lake Object** | DLO | A container for the **structured data** brought into Data Cloud. | Automatically created from data streams, but can also be created manually. A DLO is **mapped to a DMO**. |
-| **Unstructured Data Lake Object** | UDLO | A container for **unstructured data** (e.g., documents, media files) referenced by Data Cloud. | Created manually. A UDLO is **automatically mapped to an existing or new UDMO**. |
-| **Data Model Object** | DMO | A **harmonized grouping of structured data** created from data streams, insights, and other sources. It represents the standardized Customer 360 data model. | A DLO is **mapped to a DMO** to ensure consistency and standardization. |
-| **Unstructured Data Model Object**| UDMO | A group of **unstructured data** created from an unstructured data source. | A UDLO is **automatically mapped** to an existing or new UDMO. |
-| **External Data Lake Object** | External DLO | A storage container with **metadata** for data **federated** (referenced, not copied) from an **external data source** (e.g., Snowflake, AWS S3). | Acts as a **reference**, pointing to the data physically stored in an external source. |
-
-## 2. DLO
-
-* Common DLO sources: Sales Cloud exports, event streams (e-commerce), POS CSVs, external warehouses (S3/GCS). You can also reference unstructured DLOs for files (UDLOs). 
-* DLO properties: schema mirrors source; fields are created at ingest; changing DLO field types after creation is restricted—plan carefully.
-
-
-## 3. DMO
-
-* Types: standard DMOs (prebuilt like Contact, Account) and custom DMOs (create when your business needs a specific harmonized view). Create custom DMOs when you need fields or semantics not provided by standard DMOs.
-* Behavior: a DMO can draw from one or multiple DLOs; mapping defines how source fields become DMO fields and how relationships are modeled.
-
-## 4. Mapping rules & data types — practical rules
-
-* **Compatibility:** DLO → DMO field data types must be compatible; once set, types are hard to change — decide types carefully (strings vs numeric vs date).
-* **Primary keys & required mappings:** Profile/Other DMOs often require you to map the primary key; some DMOs require specific system fields to be mapped for identity or activation to work. Validate required mappings before activation.
-* **Auto-mapping:** Data Cloud offers auto-mapping helpers (model card) — useful for initial mapping but always review and adjust for business rules.
-
-## 5. Normalization & enrichment — where and how
-
-* **Normalization (when to do it):** fix inconsistent formats (phone, email, currency), flatten nested JSON, split composite fields into atomic fields — typically done between DLO ingestion and DMO mapping (use interim DLOs or transforms).
-* **Enrichment (when to do it):** add derived fields (loyalty_score, lifetime_value), lookup references (geolocation), or external enrichments (third-party demographics) — usually created as calculated insights or written back to DMOs/DLOs as needed.
-## 6. Quick tips
-
-* **Plan types first:** once DLO/DMO fields are created, changing types is hard — design schemas thoughtfully.
-* **Interim DLOs are your friend:** use them to clean noisy data before mapping into DMOs, especially for contact-point fields.
-* **Map only what you need:** avoid ingesting unnecessary columns — smaller DLOs are cheaper and faster.
-* **Document mapping decisions:** capture why you chose aggregations (SUM vs MAX), primary keys, and transforms — prevents later regressions.
-
-## Lab — Data Mapping (DLO to DMO)
-
-Mapping Data from `Contact_Home` (Data Lake Object) to `Employee` (Data Model Object). 
-
-### 1. Create Data Stream (Source Connection) 🔗
-
-- In Data Cloud, go to `Data Streams` $\to$ New.
-- Select `Salesforce CRM` from Connected Sources.
-- Click on `View Objects` $\to$ Select `Contact_Home` Object.
-- Object Category $\to$ `Other`.
-- Select the required fields: `Contact ID, FirstName, LastName, Email`.
-- Click Next and then click Deploy.
-- Data Lake Object will be created automatically.
-
-### 2. Create Data Model Object
-
-- Go to Data Model Objects in Data Cloud $\to$ Click New
-- Add Fields: `Associate ID (Primary Key), First Name, Last Name, Email`.
-- Save and Activate DMO.
-
-### 3. Map Contact (DLO) to Associate (DMO)
-
-- Go to `Data Streams` $\to$ Open the `Contact_Home` Data Stream.
-- In data map section click on `Start`.
-- Click on `Select Objects` in data model object section $\to$ Select `Associate` Object.
-- Map the fields from DLO to DMO.
-- Click Save and close.
-
-| Source DLO Field (Contact_Home) | Target DMO Field (Associate) |
-|---|---|
-**Contact ID** |	Map to **Associate ID**
-**FirstName** |	Map to **First Name**
-**LastName** |	Map to **Last Name**
-**Email** |	Map to Work **Email**
+1. Foundations & Concepts (Module 1–2)
+2. Data Ingestion & Modeling (Module 3–4)
+3. Identity Resolution & Profiles (Module 5)
+4. Segmentation, Calculated Insights & Activation (Module 6–7)
+5. Querying, APIs & Developer Topics (Module 8–10)
+6. Governance, Privacy, Monitoring & Cost Management (Module 11)
+7. Advanced Use Cases, Integrations & Real-Time Activation (Module 12–13)
+8. Capstone project + assessment (Module 14)
 
 ---
+
+## Module-by-module syllabus
+
+### Module 1 — Data Cloud / Data 360: Concepts & Architecture (FOUNDATION)
+
+**Duration:** 3 hours  
+
+**Learning objectives:** Understand what Data Cloud (Data 360) is, how it fits in the Salesforce stack, and core capabilities (unified profiles, activation, real-time segmentation, zero-copy integrations). ([Salesforce][2])  
+
+**Topics:**
+
+* What is Data Cloud / Data 360 and business value (CDP concepts).
+* High-level architecture: DLOs, DMOs, unified profiles, identity graph, activation destinations. ([Salesforce Developers][3])
+* Rebranding note: Data Cloud → Data 360 (what to expect in docs). ([Salesforce Developers][4])  
+  
+**Lab:** Walkthrough of Data Cloud UI (Trailhead lab / Academy SDC101). ([trailheadacademy.salesforce.com][1])
+
+---
+
+### Module 2 — Data Lake Objects (DLOs) & Data Model Objects (DMOs) — Modeling fundamentals
+
+**Duration:** 6 hours (lecture + lab)
+
+**Prereq:** Module 1
+
+**Learning objectives:** Understand DLO vs DMO, mapping raw sources to a harmonized model, field types and constraints. ([Salesforce Developers][3])
+
+**Topics:**
+
+* DLOs: ingestion containers & raw schema.
+* DMOs: virtual/harmonized views; when to create custom DMOs.
+* Mapping rules, data types, normalization, and enrichment points. ([Salesforce][5])  
+
+**Lab:** Create a DLO, map fields to a DMO, validate types.
+
+---
+
+### Module 3 — Data Ingestion & Streaming (BATCH & REAL-TIME)
+
+**Duration:** 6–8 hours
+
+**Prereq:** Modules 1–2
+
+**Learning objectives:** Ingest data from CRM, marketing, e-commerce, data lakes; set up streaming connectors; zero-copy integrations (Snowflake/Databricks). ([Salesforce][2])
+
+**Topics:**
+
+* Connectors: Salesforce sources (Sales/Service/Marketing Clouds), file/FTP, APIs, Streaming/CDC, and partner integrations.
+* Data mapping patterns, schema evolution, incremental loads, error handling.
+* Zero-copy architecture and using external tables (Snowflake/DB lakes). ([Salesforce][2])
+
+**Lab:** Configure sample ingestion from CSV and from a Salesforce org.
+
+---
+
+### Module 4 — Data Quality & Transformation (ENRICHMENT)
+
+**Duration:** 4–6 hours
+
+**Prereq:** Module 3
+
+**Learning objectives:** Implement data quality rules, transformations, normalization, enrichment (calculated fields).
+
+**Topics:** Validation rules, deduplication pre-processing, transformations using Data Cloud calculated insights, scheduling transformations.
+
+**Lab:** Implement a transform to standardize phone numbers and create calculated fields for lifetime value.
+
+---
+
+### Module 5 — Identity Resolution & Unified Profiles (CORE)
+
+**Duration:** 6–8 hours
+
+**Prereq:** Modules 2–4
+
+**Learning objectives:** Design match rulesets, reconciliation rules, and understand golden record principles. Learn determinist vs probabilistic matching and key-rings/graphs. ([Salesforce][6])
+
+**Topics:**
+
+* Identity graph basics, match criteria, match methods (deterministic, fuzzy), reconciliation (which value wins).
+* Identity rulesets lifecycle and performance considerations.
+* Best practices for PII handling, consent, and compliance.
+  
+**Lab:** Build a ruleset: create match rules, run identity resolution on a test dataset, review unified profiles.
+
+
+---
+
+### Module 6 — Segmentation & Calculated Insights (REAL-TIME PERSONAS)
+
+**Duration:** 6 hours
+
+**Prereq:** Module 5
+
+**Learning objectives:** Create segments (real-time & scheduled), build calculated insights (aggregates, recency/frequency metrics), and use segments for activation.
+
+**Topics:**
+
+* Segment types: streaming vs batch; segmentation builder concepts.
+* Calculated insights: aggregation, windowing, derived attributes.
+* Use cases: churn detection, high-value customer segments.
+  
+**Lab:** Create a real-time segment (e.g., "Browsed product X in last 24h + purchase in last year = No") and a calculated LTV field.
+
+
+---
+
+### Module 7 — Activation & Orchestration (Marketing/Service/Sales)
+
+**Duration:** 6 hours
+
+**Prereq:** Module 6
+
+**Learning objectives:** Activate segments to Marketing Cloud, Advertising platforms, Salesforce CRM, or external systems; automate activation workflows. ([Salesforce][7])
+
+**Topics:**
+
+* Activation destinations and connectors (Marketing Cloud, Email, Ads, custom APIs).
+* Real-time vs scheduled activation; idempotency & consent propagation.
+* Use with Journey Builder / Marketing Cloud and with Sales/Service flows.
+  
+**Lab:** Activate a segment to Marketing Cloud Audience or export to webhook and confirm delivery.
+
+---
+
+### Module 8 — Querying Data Cloud (SQL / SOQL / Query APIs)
+
+**Duration:** 6 hours
+
+**Prereq:** Module 2 & 3 and Module 0 (SQL)
+
+**Learning objectives:** Query DLOs/DMOs using Data Cloud SQL and SOQL where appropriate; use Query APIs; write efficient queries. ([Salesforce Developers][8])
+
+**Topics:**
+
+* Data Cloud SQL syntax and limitations (read-only contexts), SOQL usage against DMOs/DLOs.
+* Query performance, recommended practices, and limiting costs.
+* Using Query APIs and SDKs for exports & analytics. ([Salesforce Developers][9])
+  
+**Lab:** Write SQL queries to compute cohort metrics; use Query API to export results.
+
+
+---
+
+### Module 9 — Developer & API Integration (ADVANCED)
+
+**Duration:** 8 hours (lecture + coding labs)
+
+**Prereq:** Module 8 + familiarity with Apex/JS/Python
+
+**Learning objectives:** Use Data Cloud REST APIs/SDKs, integrate with Apex, build custom applications that consume calculated insights or profiles. ([Salesforce Developers][10])
+
+**Topics:**
+
+* Data 360 APIs (profile API, query API), SDKs, auth patterns (OAuth), rate limits.
+* Eventing and webhooks; building microservices to react to identity or segment changes.
+* Examples: pull unified profile in Apex, call Data Cloud query from external app.
+  
+**Lab:** Build a small app that queries a profile and displays calculated insight via API.
+
+---
+
+### Module 10 — Analytics, Reporting & BI connections
+
+**Duration:** 6 hours
+
+**Prereq:** Modules 2, 8, 9
+
+**Learning objectives:** Connect Data Cloud to Tableau/Einstein/BI tools, create dashboards from DMOs, use calculated insights for analytics. ([Salesforce Developers][11])
+
+**Topics:**
+
+* Tableau / Einstein integrations, building datasets from Data Cloud.
+* Near real-time dashboards vs batch reports; sample KPIs (LTV, churn, engagement).
+  
+**Lab:** Build a Tableau extract / dashboard using Data Cloud dataset.
+
+---
+
+### Module 11 — Governance, Security, Privacy & Cost Management
+
+**Duration:** 4–6 hours
+
+**Prereq:** Modules 1–6
+
+**Learning objectives:** Understand data governance, PII handling, consent, audit logging, and controlling Data Cloud costs (consumption patterns). ([Salesforce][12])
+
+**Topics:**
+
+* Data access controls, masking, encryption, deletion/retention policies.
+* Audit trails, lineage, certification; compliance (GDPR, CCPA) considerations.
+* Monitoring ingestion/query costs and best practices to reduce spend.
+
+**Lab:** Implement role-based access for a DMO and simulate a data deletion request flow.
+
+---
+
+### Module 12 — Real-time Use Cases & Streaming Architectures (Advanced)
+
+**Duration:** 6–8 hours
+
+**Prereq:** Modules 3, 6, 9
+
+**Learning objectives:** Build real-time personalization, real-time journeys, and streaming ingestion patterns (Kafka/CDC).
+
+**Topics:**
+
+* Real-time personalization example flows (web personalization, in-app messaging).
+* Integrating device IDs, ad platforms, and streaming connectors.
+
+**Lab:** Build a working demo: real-time segment → webhook → front-end personalization response.
+
+---
+
+### Module 13 — Advanced Identity, Graphs & ML-driven Insights
+
+**Duration:** 6–8 hours
+
+**Prereq:** Modules 5, 8, 9, 10
+
+**Learning objectives:** Advanced identity graph work, using ML for probabilistic matching, leveraging Einstein/third-party ML models for predictions (churn/propensity). ([Salesforce Developers][11])
+
+**Topics:**
+
+* Graph strategies, enrichment with device & behavioral signals, ML pipelines.
+* Integrating external ML models and orchestrating model outputs into calculated insights.
+
+**Lab:** Run a simple propensity model, store scores as calculated insights, and create a segment using the scores.
+
+---
+
+### Module 14 — Capstone Project & Certification Preparation
+
+**Duration:** 2–5 days (project) + 1 day exam prep
+
+**Prereq:** All prior modules
+
+**Capstone options (choose 1):**
+
+* Build an end-to-end Data Cloud solution: ingest CRM + e-commerce + web events, perform identity resolution, build LTV & propensity calculated insights, create segments, and activate to Marketing Cloud for a campaign.
+* Real-time personalization demo with segment activation to a web widget and CRM case creation for high-value customers.
+  
+**Deliverables:** Architecture diagram, implementation walkthrough, demo, cost & governance plan, test results.
+
+---
+
+## Quick reference: Official learning & docs (start here)
+
+* Trailhead Academy — Data Cloud fundamentals (SDC101). ([trailheadacademy.salesforce.com][1])
+* Data 360 / Data Cloud Developer Guide & Query Guide (APIs, SQL). ([Salesforce Developers][10])
+* Help articles: Identity Resolution, Data Lake Objects, Data Model Objects. ([Salesforce][6])
+* Certification prep: Data Cloud Consultant study guide. ([Trailhead][13])
+
+---
+
+[1]: https://trailheadacademy.salesforce.com/classes/sdc101-discover-salesforce-data-cloud-fundamentals?utm_source=chatgpt.com "Discover Salesforce Data Cloud Fundamentals - SDC101"
+[2]: https://www.salesforce.com/in/data/what-is-data-cloud/?utm_source=chatgpt.com "What Is Data 360?"
+[3]: https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-object-model.html?utm_source=chatgpt.com "Object Model in Data 360"
+[4]: https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-get-started.html?utm_source=chatgpt.com "Data 360 Developer Guide"
+[5]: https://help.salesforce.com/s/articleView?id=data.c360_a_map_custom_data_model_objects.htm&language=en_US&type=5&utm_source=chatgpt.com "Map Data Model Objects"
+[6]: https://help.salesforce.com/s/articleView?id=data.c360_a_match_rules.htm&language=en_US&type=5&utm_source=chatgpt.com "Identity Resolution Match Rules"
+[7]: https://www.salesforce.com/in/marketing/data/?utm_source=chatgpt.com "The World's #1 Customer Data Platform (CDP)"
+[8]: https://developer.salesforce.com/docs/data/data-cloud-query-guide/guide/query-guide-get-started.html?utm_source=chatgpt.com "Data 360 Query Guide"
+[9]: https://developer.salesforce.com/docs/data/data-cloud-query-guide/guide/dc-sql-query-apis.html?utm_source=chatgpt.com "Data 360 SQL Query APIs"
+[10]: https://developer.salesforce.com/docs/data/data-cloud-dev/guide/dc-dev-overview.html?utm_source=chatgpt.com "Data 360 Development Overview"
+[11]: https://developer.salesforce.com/blogs/2024/05/data-cloud-einstein-ai-the-developers-pocket-guide?utm_source=chatgpt.com "Data Cloud + Einstein AI: The Developer's Pocket Guide"
+[12]: https://www.salesforce.com/in/data/?utm_source=chatgpt.com "Data 360 (Formerly Data Cloud)"
+[13]: https://trailhead.salesforce.com/content/learn/modules/cert-prep-data-cloud-consultant/get-started-with-salesforce-data-cloud-consultant-certification-prep?utm_source=chatgpt.com "Salesforce Data Cloud Certification Prep Guide - Trailhead"
