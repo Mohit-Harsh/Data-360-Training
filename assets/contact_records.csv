@@ -1,0 +1,6 @@
+﻿FirstName,LastName,Email,Phone,MailingStreet,MailingCity,MailingState,MailingPostalCode,MailingCountry,LeadSource
+John,Doe,john.doe@example.com,(555) 123-4567,123 Main St,Anytown,CA,90210,USA,Web
+Jane,Smith,jane.smith@example.com,(555) 987-6543,456 Oak Ave,Springfield,IL,62704,USA,Phone Inquiry
+Robert,Brown,robert.brown@example.org,(555) 555-1212,789 Pine Ln,Seattle,WA,98101,USA,Partner Referral
+Emily,Davis,emily.davis@example.net,(555) 333-8888,101 Elm Dr,Miami,FL,33101,USA,External List
+Michael,Wilson,michael.wilson@example.co,(555) 222-7777,202 Birch Rd,Boston,MA,2108,USA,Other
