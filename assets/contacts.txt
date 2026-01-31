@@ -1,0 +1,11 @@
+First Name,Last Name,Title,Email,Phone,Mobile,Mailing Street,Mailing City,Mailing State,Mailing Postal Code,Mailing Country,Account Name,Lead Source
+William,Carter,Farm Owner,william.carter@example.com,+1 (515) 555-3101,+1 (515) 555-8101,782 County Road 12,Ames,IA,50010,USA,GreenField Agricultural Solutions,Web
+Will,Carter,Farm Owner,will.carter@example.com,+1 (515) 555-3101,,782 County Rd 12,Ames,IA,50010,USA,GreenField Agricultural Solutions,Purchased List
+Maria,Gonzales,Independent Grower,maria.gonzales@example.com,+1 (515) 555-3105,+1 (515) 555-8105,1248 Harvest Lane,Cedar Rapids,IA,52402,USA,GreenField Agricultural Solutions,Web
+Mariam,Gonzalez,Independent Grower,m.gonzalez@example.com,+1 (515) 555-3105,,1248 Harvest Ln,Cedar Rapids,IA,52402,USA,GreenField Agricultural Solutions,Purchased List
+Ethan,Reynolds,Agricultural Contractor,ethan.reynolds@example.com,+1 (515) 555-3110,+1 (515) 555-8110,5569 Field Creek Road,Ankeny,IA,50023,USA,GreenField Agricultural Solutions,Web
+Ethen,Reynold,Agricultural Contractor,ethan.r@example.com,,+1 (515) 555-8110,5569 Field Crk Rd,Ankeny,IA,50023,USA,GreenField Agricultural Solutions,Purchased List
+Sarah,Patel,Commercial Farmer,sarah.patel@example.com,+1 (515) 555-3120,+1 (515) 555-8120,2640 Sunset Prairie Drive,Waterloo,IA,50701,USA,GreenField Agricultural Solutions,Web
+Sara,Patel,Commercial Farmer,s.patel@example.com,+1 (515) 555-3120,,2640 Sunset Prairie Dr,Waterloo,IA,50701,USA,GreenField Agricultural Solutions,Purchased List
+Jonathan,Brooks,Livestock & Crop Farmer,jonathan.brooks@example.com,+1 (515) 555-3130,+1 (515) 555-8130,3451 Meadowview Road,Mason City,IA,50401,USA,GreenField Agricultural Solutions,Web
+Jon,Brooks,Livestock & Crop Farmer,jon.brooks@example.com,,+1 (515) 555-8130,3451 Meadow View Rd,Mason City,IA,50401,USA,GreenField Agricultural Solutions,Purchased List

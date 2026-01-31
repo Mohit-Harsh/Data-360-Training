@@ -1,6 +1,11 @@
-﻿FirstName,LastName,Email,Phone,MailingStreet,MailingCity,MailingState,MailingPostalCode,MailingCountry,LeadSource
-John,Doe,john.doe@example.com,(555) 123-4567,123 Main St,Anytown,CA,90210,USA,Web
-Jane,Smith,jane.smith@example.com,(555) 987-6543,456 Oak Ave,Springfield,IL,62704,USA,Phone Inquiry
-Robert,Brown,robert.brown@example.org,(555) 555-1212,789 Pine Ln,Seattle,WA,98101,USA,Partner Referral
-Emily,Davis,emily.davis@example.net,(555) 333-8888,101 Elm Dr,Miami,FL,33101,USA,External List
-Michael,Wilson,michael.wilson@example.co,(555) 222-7777,202 Birch Rd,Boston,MA,2108,USA,Other
+﻿First Name,Last Name,Title,Email,Phone,Mobile,Mailing Street,Mailing City,Mailing State,Mailing Postal Code,Mailing Country,Account ID,Lead Source
+William,Carter,Farm Owner,william.carter@example.com,+1 (515) 555-3101,+1 (515) 555-8101,782 County Road 12,Ames,IA,50010,USA,001dL00001fBB4rQAG,Web
+Will,Carter,Farm Owner,will.carter@example.com,+1 (515) 555-3101,,782 County Rd 12,Ames,IA,50010,USA,001dL00001fBB4rQAG,Purchased List
+Maria,Gonzales,Independent Grower,maria.gonzales@example.com,+1 (515) 555-3105,+1 (515) 555-8105,1248 Harvest Lane,Cedar Rapids,IA,52402,USA,001dL00001fBB4rQAG,Web
+Mariam,Gonzalez,Independent Grower,m.gonzalez@example.com,+1 (515) 555-3105,,1248 Harvest Ln,Cedar Rapids,IA,52402,USA,001dL00001fBB4rQAG,Purchased List
+Ethan,Reynolds,Agricultural Contractor,ethan.reynolds@example.com,+1 (515) 555-3110,+1 (515) 555-8110,5569 Field Creek Road,Ankeny,IA,50023,USA,001dL00001fBB4rQAG,Web
+Ethen,Reynold,Agricultural Contractor,ethan.r@example.com,,+1 (515) 555-8110,5569 Field Crk Rd,Ankeny,IA,50023,USA,001dL00001fBB4rQAG,Purchased List
+Sarah,Patel,Commercial Farmer,sarah.patel@example.com,+1 (515) 555-3120,+1 (515) 555-8120,2640 Sunset Prairie Drive,Waterloo,IA,50701,USA,001dL00001fBB4rQAG,Web
+Sara,Patel,Commercial Farmer,s.patel@example.com,+1 (515) 555-3120,,2640 Sunset Prairie Dr,Waterloo,IA,50701,USA,001dL00001fBB4rQAG,Purchased List
+Jonathan,Brooks,Livestock & Crop Farmer,jonathan.brooks@example.com,+1 (515) 555-3130,+1 (515) 555-8130,3451 Meadowview Road,Mason City,IA,50401,USA,001dL00001fBB4rQAG,Web
+Jon,Brooks,Livestock & Crop Farmer,jon.brooks@example.com,,+1 (515) 555-8130,3451 Meadow View Rd,Mason City,IA,50401,USA,001dL00001fBB4rQAG,Purchased List
