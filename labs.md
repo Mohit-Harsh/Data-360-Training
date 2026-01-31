@@ -49,7 +49,7 @@ Use these CSVs to seed your CRM or to emulate CRM-origin DLOs in the Data Cloud 
 
 ```csv
 Name,Type,BillingCountry
-Nimbus Retail Store #01,Customer,US
+Nimbus Retail Store,Customer,US
 Nimbus Online,Partner,US
 Acme Corporate,Customer,US
 ```
