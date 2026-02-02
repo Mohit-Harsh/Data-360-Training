@@ -1,291 +1,236 @@
-# Business Use Case
+# Salesforce Data Cloud Hands‑On Project
 
-### Brand
-
-**Nimbus Outfitters** — a mid-market retailer selling apparel and accessories online and in-store.
-
-### Goals
-
-*   Unify customer identities from **Salesforce CRM** (Sales/Service data).
-*   Power **Copilot** with **policy** and **competitive pricing** documents stored in **SharePoint** for accurate, compliant responses.
-*   Create segments from CRM purchase and service history; activate campaigns; measure with Insights.
-*   Keep architecture **standard-first**: standard objects and DMOs wherever possible.
-
-### Systems & Sources
-
-*   **Salesforce CRM** (Sales/Service Cloud): `Account`, `Contact`, `Case`, `Product2`, `Pricebook2`, `PricebookEntry`, `Order`, `OrderItem`.
-*   **SharePoint** (documents only):
-    *   `policy_docs` (returns, warranty, shipping, privacy, price-match).
-    *   `competitive_pricing` (competitor price sheets, exceptions).
-
-### Data Cloud Architecture
-
-*   **Data Streams**: Salesforce CRM (structured), SharePoint libraries (unstructured docs).
-*   **DSO/DLO**: auto-created for CRM sources.
-*   **DMO (Standard)**: `Individual`, `UnifiedIndividual`, `ContactPointEmail`, `ContactPointPhone`, `Address`, `Account`, `Product`, `Order`, `OrderItem`, `Case`.
-*   **Custom DMOs**: *Not required*. (Optional: `CompetitivePrice__mdm` only if you want **structured** competitor price analytics derived from a CSV you might add later; not used in this version.)
-
-### Data Spaces
-
-*   **Retail** (Sales/Marketing scope).
-*   **Service** (Support/Case scope).
-
-### Outcomes
-
-*   **Unified Profiles** across CRM duplicates.
-*   **Insights**: LTV, order recency, open cases.
-*   **Segments**: High-value, recent purchasers, service-sensitive.
-*   **Copilot**: Answers using **Data Graph** + **SharePoint policies/pricing docs**, citing policy versions/dates.
+## End‑to‑End Implementation Documentation
 
 ***
 
-# Dummy Data
+## 1. Purpose and Scope
 
-Use these CSVs to seed your CRM or to emulate CRM-origin DLOs in the Data Cloud stream (standard objects only).
+This document outlines the step‑by‑step implementation of an end‑to‑end Salesforce **Data Cloud** solution. The project demonstrates ingestion, data modeling, identity resolution, analytics, segmentation, transformation, and activation using standard Salesforce Data Cloud capabilities.
 
-## 1. CRM Core (Sales/Service Cloud)
+**Key Objectives:**
 
-> **Account.csv**
-
-```csv
-Name,Type,BillingCountry
-Nimbus Retail Store,Customer,US
-Nimbus Online,Partner,US
-Acme Corporate,Customer,US
-```
-
-> **Contact.csv**
-
-```csv
-FirstName,LastName,Email,Phone,MobilePhone,HasOptedOutOfEmail,DoNotCall,MailingStreet,MailingCity,MailingState,MailingPostalCode,MailingCountry
-Ava,Lee,ava.lee@example.com,+1-415-555-0101,+1-415-555-1101,false,false,10 Pine St,San Francisco,CA,94102,US
-Noah,Patel,noah.patel@example.com,+1-650-555-0102,+1-650-555-1102,true,false,25 Oak Ave,San Mateo,CA,94401,US
-Lucas,Wong,lucas.wong@example.com,+1-408-555-0103,+1-408-555-1103,false,true,80 Elm Rd,San Jose,CA,95112,US
-Mia,Gonzalez,mia.gonzalez@example.com,+1-510-555-0104,+1-510-555-1104,false,false,55 Maple Ln,Oakland,CA,94607,US
-```
-
-> **Case.csv**
-
-```csv
-ContactId,Subject,Status,Origin,Priority,CreatedDate
-Return request for jacket,New,Web,Medium,2025-12-20T10:00:00Z
-Size exchange inquiry,Working,Phone,Low,2025-12-19T09:00:00Z
-Payment issue,New,Email,High,2025-12-22T14:30:00Z
-```
-
-> **Product2.csv**
-
-```csv
-Name,ProductCode,IsActive,Family
-Classic Denim Jacket,CDJ-001,true,Apparel
-Trail Running Shoes,TRS-042,true,Footwear
-Everyday Tee,EVT-011,true,Apparel
-```
-
-> **Order.csv**
-
-```csv
-Id,AccountId,EffectiveDate,Status,TotalAmount,Description
-801A000001,001A000001,2025-10-15,Activated,199.00,Store purchase
-801A000002,001A000002,2025-11-05,Activated,79.00,Online order
-801A000003,001A000003,2025-12-01,Activated,120.00,Shipped
-```
-
-> **OrderItem.csv**
-
-```csv
-Id,OrderId,PricebookEntryId,Quantity,UnitPrice
-802A000001,801A000001,01uA000002,1,120.00
-802A000002,801A000001,01uA000003,3,25.00
-802A000003,801A000002,01uA000001,1,79.00
-```
-
-## 2. SharePoint (Documents Only)
-
-> **policy\_docs/** (PDFs; examples)
-
-    returns_policy_v3.pdf
-    shipping_policy_2025.pdf
-    warranty_policy_apparel_footwear.pdf
-    privacy_notice_v2.pdf
-    price_match_policy_v1.pdf
-
-**Example snippets** (for testing retrieval):
-
-*   `returns_policy_v3.pdf`: “Returns accepted within **30 days** of delivery. Items must be unworn with tags. Receipt or order number required.”
-*   `price_match_policy_v1.pdf`: “We match qualifying competitor prices at purchase or within **7 days**. Excludes flash sales, clearance, bundles.”
-
-> **competitive\_pricing/** (PDFs or internal spreadsheets exported to PDF)
-
-    competitor_prices_Q4_2025.pdf
-    price_match_exceptions_2025.pdf
-
-*(No structured CSV ingestion from SharePoint in this version.)*
+*   Ingest Salesforce core objects into Data Cloud
+*   Establish standardized data models and relationships
+*   Perform identity resolution and unification
+*   Generate actionable insights using Calculated Insights and Segments
+*   Activate results via Data Actions and Platform Events
 
 ***
 
-# Hands‑On Labs (Concise)
+## 2. Data Ingestion
 
-> Steps are purposefully brief. Use **standard DMOs** wherever possible.
+### 2.1 Create Data Streams
 
-## Module 1
+Data Streams are configured to ingest data from Salesforce Core CRM objects.
 
-1.  **Data Cloud Setup**
+**Objects Ingested:**
 
-*   Enable Data Cloud.
-*   Create **Data Spaces**: `Retail`, `Service`.
-*   Register **Data Sources**: Salesforce CRM; SharePoint (libraries: `policy_docs`, `competitive_pricing`).
+*   Account
+*   Contact
+*   Order
 
-2.  **Licenses and Permission Sets**
+**Steps:**
 
-*   Assign **Data Cloud Admin/User**.
-*   Grant **Data Space** access.
-
-3.  **Data Streams**
-
-*   **Create CRM Data Stream** (Retail): `Account`, `Contact`, `Case`, `Product2`, `Order`, `OrderItem`.
-*   **Register SharePoint Libraries** (Retail): `policy_docs`, `competitive_pricing`.
-
-4.  **DSO, DLO, DMO \[Standard and Custom]**
-
-*   Verify CRM **DSO/DLO** auto-created.
-*   Use **Standard DMOs**: `Individual`, `ContactPointEmail`, `ContactPointPhone`, `Address`, `Account`, `Product`, `Order`, `OrderItem`, `Case`.
-*   *(No custom DMOs required for policies/pricing docs; they are unstructured and used for retrieval.)*
-
-5.  **Data Spaces**
-
-*   Scope CRM streams to `Retail` (and `Service` for Cases if needed).
-*   Validate isolation and role-based access.
-
-6.  **Data Explorer and Query Editor**
-
-*   Inspect counts for Contacts, Orders, Cases.
-*   Query: “Top 5 products by revenue,” “Open cases by priority,” “Orders in last 30 days.”
-
-7.  **Data Ingestion: SharePoint**
-
-*   Connect SharePoint site/tenant; grant library permissions.
-*   Ingest & index **`policy_docs`** and **`competitive_pricing`** libraries for Module 3 (RAG).
-
-8.  **Data Mapping**
-
-*   **Map DLO → DMO**:
-    *   `Contact` → `Individual`, `ContactPointEmail`, `ContactPointPhone`, `Address`.
-    *   `Account` → `Account`.
-    *   `Product2` → `Product`.
-    *   `Order` / `OrderItem` → `Order` / `OrderItem`.
-    *   `Case` → `Case`.
-*   *(No DMO mapping for SharePoint documents; they are indexed, not modeled.)*
+1.  Navigate to **Data Cloud Setup → Data Streams**
+2.  Create individual data streams for:
+    *   Account object
+    *   Contact object
+    *   Order object
+3.  Validate successful ingestion and Data Lake Object (DLO) creation for each source
 
 ***
 
-## Module 2
+## 3. Data Modeling and Mapping
 
-1.  **Identity Resolutions**
+### 3.1 Contact Data Mapping
 
-*   Enable Identity Resolution for `Individual`.
+The **Contact DLO** is mapped to the following **Standard Data Model Objects (DMOs)**:
 
-2.  **Matching Rules**
+| Source DLO | Target DMO                     |
+| ---------- | ------------------------------ |
+| Contact    | Individual (Standard)          |
+| Contact    | ContactPointEmail (Standard)   |
+| Contact    | ContactPointPhone (Standard)   |
+| Contact    | ContactPointAddress (Standard) |
 
-*   Create: **Email exact**.
-*   Create: **Phone exact + Postal exact**.
-*   Create: **Name + Address fuzzy**.
+**Purpose:**
 
-3.  **Unified Individual & Links**
-
-*   Run Identity Resolution.
-*   Review `UnifiedIndividual` profiles & contributing source links.
-
-4.  **Identity Resolution Rule Set**
-
-*   Combine rules; set priority; schedule incremental runs.
-
-5.  **Consolidation Rate**
-
-*   Set threshold (e.g., 0.85 → 0.90); compare merges; document over/under-merge tradeoffs.
-
-6.  **Reconciliation Rules**
-
-*   Survivorship: Prefer CRM for Name; most recent verified for Email/Phone; highest confidence for Address.
-
-7.  **Data Transformation**
-
-*   Normalize emails (lowercase/trim).
-*   Standardize phone formats (E.164).
-*   Derive: `days_since_last_order`, `total_orders`, `avg_order_value`.
-
-8.  **Calculation Insights & Streaming Insights**
-
-*   **Calculation Insight**:
-    *   `lifetime_value` = sum(`Order.TotalAmount`) by Individual.
-    *   `30_day_order_count`.
-*   **Streaming Insight** (CRM event-driven):
-    *   `recent_case_opened` if `Case.CreatedDate` within last 24h.
-    *   `recent_order_placed` if `Order.EffectiveDate` within last 7d.
-
-9.  **Segments**
-
-*   **High-Value Loyal**: `lifetime_value > 250` AND `30_day_order_count >= 1`.
-*   **Service Sensitive**: `recent_case_opened = true` OR `Priority = High`.
-*   **Win-Back**: `days_since_last_order > 60` AND `total_orders >= 1`.
-
-10. **Data Action \[Data Action Targets, Activation Targets]**
-
-*   Create **Activation Target**: Marketing Cloud (Email/SMS audience).
-*   Create **Data Action Target**: Salesforce (create Task/Case) or webhook.
-*   **Activate Segments** with identifiers (email/phone) + attributes (LTV, last order date).
-
-11. **Data Kit: Data Cloud Deployment**
-
-*   Create **Data Kit** including Streams, Mappings, Identity Rules, Transformations, Insights, Segments.
-*   Deploy to higher environments and validate.
+*   Enables individual‑centric identity resolution
+*   Standardizes contact channels (email, phone, address)
 
 ***
 
-## Module 3
+### 3.2 Order Data Mapping
 
-1.  **Chunking**
+The **Order DLO** is mapped to:
 
-*   Register **SharePoint** libraries: `policy_docs`, `competitive_pricing`.
-*   Define chunking: semantic chunks (\~800 tokens, 10–15% overlap), strip headers/footers, preserve tables.
-*   Build embeddings and index.
-
-2.  **Retrievers**
-
-*   **Documents Retriever**: over `policy_docs` + `competitive_pricing`.
-*   **Data Graph Retriever**: `UnifiedIndividual` → `Orders` → `OrderItems` → `Product` (+ `Case`). Expose: last order date, items, LTV, open cases, contact points.
-
-3.  **Hybrid Queries**
-
-*   Enable hybrid (BM25 + vector).
-*   Route policy/price questions → document retriever; order/account questions → data graph retriever; combine when needed (e.g., “Is this customer eligible for price match on TRS‑042?”).
-
-4.  **Ranking Models**
-
-*   Apply semantic reranker (top‑k 20 → rerank top‑5).
-*   A/B test: keyword-only vs hybrid+rerank on policy edge cases (exclusions, time windows).
-
-5.  **Intelligent Context**
-
-*   Copilot Skill: **“Policy & Price Assist”**
-    *   **Context (Data Cloud)**: `segment_membership`, `lifetime_value`, `last_order`, `open_case_count`, `contact emails/phones`.
-    *   **Grounding**: Policies & pricing from SharePoint docs; customer state from Data Graph.
-    *   **Guardrails**: Respect `HasOptedOutOfEmail` / `DoNotCall` for suggested outreach; cite policy doc name/version/date in all answers.
+| Source DLO | Target DMO            |
+| ---------- | --------------------- |
+| Order      | SalesOrder (Standard) |
 
 ***
 
-## Mapping Cheatsheet (Final)
+## 4. Data Relationships
 
-| Source DLO               | Target DMO        | Key Field Mappings                                                     |
-| ------------------------ | ----------------- | ---------------------------------------------------------------------- |
-| Contact (CRM)            | Individual        | Email → PrimaryEmail, Phone/Mobile → PrimaryPhone, Mailing\* → Address |
-| Contact (CRM)            | ContactPointEmail | Contact.Email → Address, IsPrimary = true                              |
-| Contact (CRM)            | ContactPointPhone | Contact.MobilePhone (pref.) or Phone → Number                          |
-| Account (CRM)            | Account           | Name, Type, Country                                                    |
-| Product2 (CRM)           | Product           | Name, ProductCode, Family                                              |
-| Order/OrderItem          | Order/OrderItem   | Header totals/dates; items: ProductCode, Quantity, UnitPrice           |
-| Case (CRM)               | Case              | Subject, Status, Origin, Priority, CreatedDate                         |
-| **policy\_docs**         | *Doc Retriever*   | *Indexed for retrieval; not mapped to DMOs*                            |
-| **competitive\_pricing** | *Doc Retriever*   | *Indexed for retrieval; not mapped to DMOs*                            |
+### 4.1 SalesOrder to Individual Relationship
+
+A **N:1 relationship** is created between:
+
+*   **SalesOrder → Individual**
+
+**Relationship Configuration:**
+
+*   **Relationship Type:** N:1
+*   **Join Field:**
+    *   SalesOrder.Bill\_To\_Contact
+    *   Individual.Individual\_Id
+
+**Purpose:**
+
+*   Associates multiple orders to a single individual
+*   Enables transaction‑level analytics at the individual level
+
+***
+
+## 5. Identity Resolution
+
+### 5.1 Identity Resolution Ruleset Creation
+
+An **Identity Resolution Ruleset** is created with the following matching criteria:
+
+    (Fuzzy Name AND Normalized Email)
+    OR
+    (Fuzzy Name AND Normalized Phone)
+
+**Configuration Highlights:**
+
+*   Uses probabilistic matching for name
+*   Uses normalized formats for email and phone
+*   Logical OR enables flexible matching across channels
+
+***
+
+### 5.2 Identity Resolution Execution
+
+The ruleset is executed to generate unified profiles.
+
+**Generated Objects Include:**
+
+*   UnifiedIndividual
+*   UnifiedIndividualLink
+*   Identity Resolution Result objects
+
+***
+
+### 5.3 Consolidation Review and Optimization
+
+*   Review **consolidation rate** post‑resolution
+*   Adjust matching thresholds if over‑ or under‑consolidation occurs
+*   Modify **reconciliation rules** when attribute conflicts arise
+*   Re‑run the ruleset after adjustments
+
+***
+
+## 6. Calculated Insights
+
+### 6.1 Calculated Insights Creation
+
+A Calculated Insight is created using:
+
+**DMOs Selected:**
+
+*   UnifiedIndividual
+*   SalesOrder
+
+**Automatic Join Behavior:**
+
+*   Data Cloud automatically derives joins using defined relationships
+
+**Filters Applied:**
+
+*   Orders placed in the **last 30 days**
+
+**Aggregations (Grouped by UnifiedIndividual):**
+
+*   **Average Purchase Value**
+*   **Grand Total Amount**
+*   **Total Orders**
+
+***
+
+## 7. Segmentation
+
+### 7.1 Segment: High‑Value Loyal
+
+A segment named **High‑Value Loyal** is created based on the Calculated Insights.
+
+**Segment Criteria:**
+
+*   Average Purchase Value **> 150**
+
+**Purpose:**
+
+*   Identifies high‑spending, loyal customers
+*   Enables targeted engagement and activation
+
+***
+
+## 8. Data Transformation
+
+### 8.1 Order Summary Data Transform
+
+A **Data Transform** is created to generate an aggregated order summary.
+
+**Source DMO:**
+
+*   SalesOrder
+
+**Joins:**
+
+*   SalesOrder → UnifiedIndividual
+*   UnifiedIndividual → Individual
+
+**Derived and Aggregated Metrics:**
+
+*   Number of days since last order
+*   Grand Total Amount
+*   Order Count
+*   Average Order Value
+
+**Grouping:**
+
+*   Grouped by UnifiedIndividual
+
+**Output:**
+
+*   Persisted into a new custom DMO:  
+    **Order\_Summary**
+
+***
+
+## 9. Data Activation
+
+### 9.1 Data Action Target
+
+A **Data Action Target** is configured:
+
+*   **Target Type:** Salesforce Platform Event
+*   **Event Name:** High‑Value Loyal
+
+***
+
+### 9.2 Data Action Creation
+
+A Data Action is created using the **Order\_Summary** DMO.
+
+**Trigger Condition:**
+
+*   Average Order Value **>= 200**
+
+**Outcome:**
+
+*   Publishes records meeting the criteria to the **High‑Value Loyal** Platform Event
+*   Enables real‑time downstream integrations or automations
 
 ***
